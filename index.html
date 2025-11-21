@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Text to PNG – writer_lost_abhi</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body data-theme="dark">
+  <div class="app">
+    <header class="app-header">
+      <div>
+        <h1>Text ➜ PNG Generator</h1>
+        <p>Create clean transparent text & emoji PNGs in your own font.</p>
+      </div>
+
+      <div class="header-right">
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-label">Dark</span>
+        </button>
+        <span class="badge">by Abhishek</span>
+      </div>
+    </header>
+
+    <main class="app-main">
+      <!-- MAIN PANEL -->
+      <section class="panel panel-main">
+        <h2 class="panel-title">Enter Text / Emoji</h2>
+        <p class="panel-subtitle">
+          Type anything below and see live preview on the canvas.
+        </p>
+
+        <label for="textInput" class="field-label">Your Text</label>
+        <textarea
+          id="textInput"
+          rows="3"
+          placeholder="Type here... 😊🔥💔"
+        ></textarea>
+
+        <!-- CONTROLS -->
+        <div class="control-grid">
+          <div class="control">
+            <label for="fontSizeSlider">Font size</label>
+            <div class="control-row">
+              <input
+                type="range"
+                id="fontSizeSlider"
+                min="24"
+                max="160"
+                value="64"
+              />
+              <span id="fontSizeValue" class="value-pill">64px</span>
+            </div>
+          </div>
+
+          <div class="control">
+            <label for="glowColor">Glow color</label>
+            <div class="control-row">
+              <input type="color" id="glowColor" value="#000000" />
+            </div>
+          </div>
+
+          <div class="control">
+            <label for="glowIntensitySlider">Glow intensity</label>
+            <div class="control-row">
+              <input
+                type="range"
+                id="glowIntensitySlider"
+                min="0"
+                max="40"
+                value="10"
+              />
+              <span id="glowIntensityValue" class="value-pill">10</span>
+            </div>
+          </div>
+
+          <!-- hidden position sliders (logic ke liye, UI me nahi dikhenge) -->
+          <div class="control control-pos">
+            <label for="posXSlider">Text X position</label>
+            <div class="control-row">
+              <input
+                type="range"
+                id="posXSlider"
+                min="0"
+                max="100"
+                value="50"
+              />
+              <span id="posXValue" class="value-pill">50%</span>
+            </div>
+          </div>
+
+          <div class="control control-pos">
+            <label for="posYSlider">Text Y position</label>
+            <div class="control-row">
+              <input
+                type="range"
+                id="posYSlider"
+                min="0"
+                max="100"
+                value="50"
+              />
+              <span id="posYValue" class="value-pill">50%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canvas size custom selector -->
+        <div class="canvas-size-row">
+          <span class="row-label">Canvas size</span>
+          <button id="canvasSizeBtn" class="custom-select-btn">
+            <span id="canvasSizeLabel">Default (800×400)</span>
+          </button>
+        </div>
+
+        <!-- Toggles -->
+        <div class="toggle-row">
+          <label class="toggle">
+            <input type="checkbox" id="autoGlowToggle" />
+            <span class="toggle-box"></span>
+            <span>AI Auto Glow</span>
+          </label>
+
+          <label class="toggle">
+            <input type="checkbox" id="autoStyleToggle" />
+            <span class="toggle-box"></span>
+            <span>Auto Style Detector</span>
+          </label>
+
+          <label class="toggle">
+            <input type="checkbox" id="watermarkToggle" checked />
+            <span class="toggle-box"></span>
+            <span>Watermark 20%</span>
+          </label>
+        </div>
+
+        <!-- Background image -->
+        <div class="bg-upload-row">
+          <label class="field-label">Background image (optional)</label>
+
+          <input
+            type="file"
+            id="bgImageInput"
+            accept="image/*"
+            style="display: none"
+          />
+          <button type="button" id="bgImageBtn" class="secondary-btn">
+            Choose Image
+          </button>
+          <span id="bgImageName" class="hint-small">No image selected</span>
+        </div>
+
+        <!-- Buttons -->
+        <div class="buttons-row">
+          <button id="generateBtn" class="primary-btn">Download PNG</button>
+          <button id="clearBtn" class="secondary-btn">Clear</button>
+          <span class="hint">
+            Transparent background (no image) • Custom font • Emoji friendly
+          </span>
+        </div>
+
+        <!-- PREVIEW -->
+        <div class="preview-box">
+          <div class="preview-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span class="preview-title">
+              Preview (tap & drag • pinch to zoom)
+            </span>
+          </div>
+          <canvas id="canvas" width="800" height="400"></canvas>
+        </div>
+
+        <a id="downloadLink" style="display: none">Download PNG</a>
+      </section>
+
+      <!-- INFO & SOCIAL -->
+      <section class="info-row">
+        <section class="panel panel-about">
+          <h2 class="panel-title">About this tool</h2>
+          <p class="panel-subtitle">
+            Simple text ➜ PNG generator built fully in Termux. Uses your own
+            font file to render transparent PNGs.
+          </p>
+          <ul class="feature-list">
+            <li>✅ Custom font (.ttf)</li>
+            <li>✅ Transparent PNG or image background</li>
+            <li>✅ Emoji + glow + auto style</li>
+            <li>✅ Local settings saved on device</li>
+          </ul>
+        </section>
+
+        <section class="panel panel-social">
+          <h2 class="panel-title">Connect with me</h2>
+          <p class="panel-subtitle">Follow my work, quotes and projects:</p>
+
+          <div class="social-grid">
+            <a
+              class="social-chip ig"
+              href="https://www.instagram.com/writer_lost_abhi"
+              target="_blank"
+            >
+              <div class="icon-circle">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+                  alt="Instagram"
+                />
+              </div>
+              <div class="social-text">
+                <span class="social-name">Instagram</span>
+                <span class="social-handle">@writer_lost_abhi</span>
+              </div>
+            </a>
+
+            <a
+              class="social-chip fb"
+              href="https://www.facebook.com/writer_lost_abhi"
+              target="_blank"
+            >
+              <div class="icon-circle">
+                <img
+                  src="https://cdn-icons-png.flaticon.com/512/733/733547.png"
+                  alt="Facebook"
+                />
+              </div>
+              <div class="social-text">
+                <span class="social-name">Facebook</span>
+                <span class="social-handle">@writer_lost_abhi</span>
+              </div>
+            </a>
+
+            <a
+              class="social-chip th"
+              href="https://www.threads.net/@writer_lost_abhi"
+              target="_blank"
+            >
+              <div class="icon-circle threads-icon">𝕋</div>
+              <div class="social-text">
+                <span class="social-name">Threads</span>
+                <span class="social-handle">@writer_lost_abhi</span>
+              </div>
+            </a>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span
+        >Made with ❤️ by
+        <strong>Abhishek Gangwar (writer_lost_abhi)</strong></span
+      >
+    </footer>
+
+    <div id="toast" class="toast">
+      Your PNG was successfully downloaded ✅
+    </div>
+  </div>
+
+  <!-- Canvas size custom modal -->
+  <div id="sizeModal" class="size-modal hidden">
+    <div class="modal-sheet">
+      <h3>Select Canvas Size</h3>
+
+      <div class="size-option" data-value="800x400">
+        <div class="icon-box">⬛</div>
+        Default (800×400)
+      </div>
+
+      <div class="size-option" data-value="1080x1080">
+        <div class="icon-box">🟥</div>
+        Post 1080×1080
+      </div>
+
+      <div class="size-option" data-value="1080x1920">
+        <div class="icon-box">🟦</div>
+        Story 1080×1920
+      </div>
+
+      <div class="size-option" data-value="1280x720">
+        <div class="icon-box">🟨</div>
+        Thumb 1280×720
+      </div>
+
+      <div class="size-option" data-value="custom">
+        <div class="icon-box">⚙️</div>
+        Custom (keep current)</div>
+
+      <button id="closeSizeModal" class="close-btn">Cancel</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
