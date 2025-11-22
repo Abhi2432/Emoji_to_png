@@ -3,6 +3,13 @@
   font-family: "MyFont";
   src: url("myfont.ttf") format("truetype");
 }
+.app-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  margin-right: 8px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.8);
+}
 
 :root {
   --radius-lg: 18px;
